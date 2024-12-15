@@ -1,22 +1,8 @@
 "use client";
-import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import React, { useMemo, useRef } from "react";
-
-// Dynamic imports
-const Canvas = dynamic(
-  () => import("@react-three/fiber").then((mod) => mod.Canvas),
-  { ssr: false }
-);
-const useFrame = dynamic(
-  () => import("@react-three/fiber").then((mod) => mod.useFrame),
-  { ssr: false }
-);
-const useThree = dynamic(
-  () => import("@react-three/fiber").then((mod) => mod.useThree),
-  { ssr: false }
-);
-const Three = dynamic(() => import("three"), { ssr: false });
+import * as THREE from "three";
 
 export const CanvasRevealEffect = ({
   animationSpeed = 0.4,
@@ -26,6 +12,10 @@ export const CanvasRevealEffect = ({
   dotSize,
   showGradient = true,
 }: {
+  /**
+   * 0.1 - slower
+   * 1.0 - faster
+   */
   animationSpeed?: number;
   opacities?: number[];
   colors?: number[][];
@@ -202,7 +192,7 @@ const ShaderMaterial = ({
   uniforms: Uniforms;
 }) => {
   const { size } = useThree();
-  const ref = useRef<Three.Mesh>();
+  const ref = useRef<THREE.Mesh>();
   let lastFrameTime = 0;
 
   useFrame(({ clock }) => {
@@ -230,7 +220,7 @@ const ShaderMaterial = ({
           break;
         case "uniform3f":
           preparedUniforms[uniformName] = {
-            value: new Three.Vector3().fromArray(uniform.value),
+            value: new THREE.Vector3().fromArray(uniform.value),
             type: "3f",
           };
           break;
@@ -240,14 +230,14 @@ const ShaderMaterial = ({
         case "uniform3fv":
           preparedUniforms[uniformName] = {
             value: uniform.value.map((v: number[]) =>
-              new Three.Vector3().fromArray(v)
+              new THREE.Vector3().fromArray(v)
             ),
             type: "3fv",
           };
           break;
         case "uniform2f":
           preparedUniforms[uniformName] = {
-            value: new Three.Vector2().fromArray(uniform.value),
+            value: new THREE.Vector2().fromArray(uniform.value),
             type: "2f",
           };
           break;
@@ -259,13 +249,14 @@ const ShaderMaterial = ({
 
     preparedUniforms["u_time"] = { value: 0, type: "1f" };
     preparedUniforms["u_resolution"] = {
-      value: new Three.Vector2(size.width * 2, size.height * 2),
-    };
+      value: new THREE.Vector2(size.width * 2, size.height * 2),
+    }; // Initialize u_resolution
     return preparedUniforms;
   };
 
+  // Shader material
   const material = useMemo(() => {
-    const materialObject = new Three.ShaderMaterial({
+    const materialObject = new THREE.ShaderMaterial({
       vertexShader: `
       precision mediump float;
       in vec2 coordinates;
@@ -281,10 +272,10 @@ const ShaderMaterial = ({
       `,
       fragmentShader: source,
       uniforms: getUniforms(),
-      glslVersion: Three.GLSL3,
-      blending: Three.CustomBlending,
-      blendSrc: Three.SrcAlphaFactor,
-      blendDst: Three.OneFactor,
+      glslVersion: THREE.GLSL3,
+      blending: THREE.CustomBlending,
+      blendSrc: THREE.SrcAlphaFactor,
+      blendDst: THREE.OneFactor,
     });
 
     return materialObject;
@@ -300,12 +291,11 @@ const ShaderMaterial = ({
 
 const Shader: React.FC<ShaderProps> = ({ source, uniforms, maxFps = 60 }) => {
   return (
-    <Canvas className="absolute inset-0 h-full w-full">
+    <Canvas className="absolute inset-0  h-full w-full">
       <ShaderMaterial source={source} uniforms={uniforms} maxFps={maxFps} />
     </Canvas>
   );
 };
-
 interface ShaderProps {
   source: string;
   uniforms: {
