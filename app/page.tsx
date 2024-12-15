@@ -1,19 +1,23 @@
 "use client";
 
-import { navItems } from "@/data";
+import dynamic from "next/dynamic";
 
-import Hero from "@/components/Hero";
-import Grid from "@/components/Grid";
-import Footer from "@/components/Footer";
-import Clients from "@/components/Clients";
-import Approach from "@/components/Approach";
-import Experience from "@/components/Experience";
-import RecentProjects from "@/components/RecentProjects";
+// Dynamically import client-side components
+const Hero = dynamic(() => import("@/components/Hero"), { ssr: false });
+const Grid = dynamic(() => import("@/components/Grid"), { ssr: false });
+const Footer = dynamic(() => import("@/components/Footer"), { ssr: false });
+const Clients = dynamic(() => import("@/components/Clients"), { ssr: false });
+const Experience = dynamic(() => import("@/components/Experience"), {
+  ssr: false,
+});
+const RecentProjects = dynamic(() => import("@/components/RecentProjects"), {
+  ssr: false,
+});
 import { FloatingNav } from "@/components/ui/FloatingNavbar";
-import Profiles from "@/components/Profiles";
-import Skills from "@/components/Skills";
-
-import Resume from "@/components/Resume";
+const Profiles = dynamic(() => import("@/components/Profiles"), { ssr: false });
+const Skills = dynamic(() => import("@/components/Skills"), { ssr: false });
+const Resume = dynamic(() => import("@/components/Resume"), { ssr: false });
+import { navItems } from "@/data";
 
 const Home = () => {
   return (
@@ -28,7 +32,6 @@ const Home = () => {
         <Clients />
         <Experience />
         <Resume />
-        {/* <Approach /> */}
         <Footer />
       </div>
     </main>
