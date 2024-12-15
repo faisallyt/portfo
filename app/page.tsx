@@ -12,6 +12,7 @@ import RecentProjects from "@/components/RecentProjects";
 import { FloatingNav } from "@/components/ui/FloatingNavbar";
 import Profiles from "@/components/Profiles";
 import Skills from "@/components/Skills";
+
 import Resume from "@/components/Resume";
 
 const Home = () => {
