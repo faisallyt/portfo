@@ -79,7 +79,7 @@ export const projects = [
     title: "Repository Reviewer",
     des: "A Web App that reviews and Rates Your Github Repository's folder Structure",
     img: "/Repository-Reviewer.png",
-    iconLists: ["/re.svg", "/tail.svg", "/js.svg", "/node.svg", "/redux.svg"],
+    iconLists: ["/re.svg", "/tail.svg", "/js.svg", "/node.svg", "/Redux.svg"],
     link: "/ui.earth.com",
   },
   {
