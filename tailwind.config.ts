@@ -26,6 +26,11 @@ const config = {
       },
     },
     extend: {
+      screens:{
+        'xsm':'390px',
+        'xxsm':'410px',
+        'pro':'430px'
+      },
       colors: {
         black: {
           DEFAULT: "#000",
